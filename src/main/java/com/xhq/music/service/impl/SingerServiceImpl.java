@@ -16,36 +16,36 @@ public class SingerServiceImpl implements SingerService {
 
     @Override
     public boolean insertSinger(Singer singer) {
-        return false;
+        return singerMapper.insertSinger(singer) > 0;
     }
 
     @Override
     public boolean update(Singer singer) {
-        return false;
+        return singerMapper.update(singer) > 0;
     }
 
     @Override
     public boolean delete(Integer id) {
-        return false;
+        return singerMapper.delete(id) > 0;
     }
 
     @Override
     public Singer selectById(Integer id) {
-        return null;
+        return singerMapper.selectById(id);
     }
 
     @Override
     public List<Singer> allSinger() {
-        return null;
+        return singerMapper.allSinger();
     }
 
     @Override
     public List<Singer> singerOfName(String name) {
-        return null;
+        return singerMapper.singerOfName(name);
     }
 
     @Override
     public List<Singer> singerOfSex(Integer sex) {
-        return null;
+        return singerMapper.singerOfSex(sex);
     }
 }

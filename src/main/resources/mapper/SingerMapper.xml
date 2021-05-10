@@ -16,9 +16,9 @@
         select count(*) from admin where name=#{username} and password=#{password}
     </select>
 
-    <select id="Base_Column_List">
+    <sql id="Base_Column_List">
         id,name,sex,pic,birth,location,introduction
-    </select>
+    </sql>
 
     <insert id="insertSinger" parameterType="com.xhq.music.domain.Singer">
         insert into singer

@@ -44,37 +44,38 @@
             <if test="introduction!=null">
                 introduction,
             </if>
-            <trim prefix="value (" suffix=")" suffixOverrides=",">
-                <if test="id!=null">
-                    #{id},
-                </if>
-                <if test="name!=null">
-                    #{name},
-                </if>
-                <if test="sex!=null">
-                    #{sex},
-                </if>
-                <if test="pic!=null">
-                    #{pic},
-                </if>
-                <if test="birth!=null">
-                    #{birth},
-                </if>
-                <if test="location!=null">
-                    #{location},
-                </if>
-                <if test="introduction!=null">
-                    #{introduction},
-                </if>
-            </trim>
         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id!=null">
+                #{id},
+            </if>
+            <if test="name!=null">
+                #{name},
+            </if>
+            <if test="sex!=null">
+                #{sex},
+            </if>
+            <if test="pic!=null">
+                #{pic},
+            </if>
+            <if test="birth!=null">
+                #{birth},
+            </if>
+            <if test="location!=null">
+                #{location},
+            </if>
+            <if test="introduction!=null">
+                #{introduction},
+            </if>
+        </trim>
+
     </insert>
 
     <update id="update" parameterType="com.xhq.music.domain.Singer">
-        UPPER singer
+        UPDATE singer
         <set>
             <if test="id!=null">
-               id=#{id},
+                id=#{id},
             </if>
             <if test="name!=null">
                 name=#{name},
@@ -97,7 +98,7 @@
         </set>
         where id=#{id}
     </update>
-    
+
     <delete id="delete" parameterType="java.lang.Integer">
         delete from singer where id=#{id}
     </delete>
@@ -114,7 +115,7 @@
         <include refid="Base_Column_List"/>
         from singer
     </select>
-    
+
     <select id="singerOfName" resultMap="BaseResultMap" parameterType="java.lang.String">
         select
         <include refid="Base_Column_List"/>

@@ -23,10 +23,7 @@ public class AdminController {
     /*
      * 判断是否登录成功
      * */
-    @GetMapping(value = "/admin/login/s")
-    public void loginS(){
-        System.out.println("asdasd");
-    }
+
     @RequestMapping(value = "/admin/login/status", method = RequestMethod.POST)
     public Object loginStatus(HttpServletRequest request, HttpSession session) {
         JSONObject jsonObject = new JSONObject();

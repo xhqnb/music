@@ -67,4 +67,17 @@ public class Singer {
     public void setIntroduction(String introduction) {
         this.introduction = introduction;
     }
+
+    @Override
+    public String toString() {
+        return "Singer{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", sex=" + sex +
+                ", pic='" + pic + '\'' +
+                ", birth=" + birth +
+                ", location='" + location + '\'' +
+                ", introduction='" + introduction + '\'' +
+                '}';
+    }
 }

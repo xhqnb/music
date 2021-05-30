@@ -1,8 +1,9 @@
 package com.xhq.music.domain;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Song {
+public class Song implements Serializable {
     /*主键*/
     private Integer id;
     //歌手id

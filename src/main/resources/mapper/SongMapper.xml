@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC
         "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.javaclimb.music.dao.SongMapper">
+<mapper namespace="com.xhq.music.dao.SongMapper">
     <resultMap id="BaseResultMap" type="com.xhq.music.domain.Song" >
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="singer_id" jdbcType="VARCHAR" property="singerId"/>
@@ -26,7 +26,7 @@
         id,singer_id,name,introduction,create_time,update_time,pic,lyric,url
     </sql>
 
-    <insert id="insert" parameterType="com.javaclimb.music.domain.Song">
+    <insert id="insert" parameterType="com.xhq.music.domain.Song">
         insert into song
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -75,10 +75,10 @@
             <if test="url != null">
                 #{url},
             </if>
-        </trim>        
+        </trim>
     </insert>
-    
-    <update id="update" parameterType="com.javaclimb.music.domain.Song">
+
+    <update id="update" parameterType="com.xhq.music.domain.Song">
         update song
         <set>
             <if test="singerId != null">

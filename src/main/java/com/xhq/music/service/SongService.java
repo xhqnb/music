@@ -4,6 +4,7 @@ import com.xhq.music.domain.Song;
 
 import java.util.List;
 
+
 public interface SongService {
     /**
      *增加

@@ -3,12 +3,14 @@ package com.xhq.music.service.impl;
 import com.xhq.music.dao.SongMapper;
 import com.xhq.music.domain.Song;
 import com.xhq.music.service.SongService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class SongServiceImpl implements SongService {
+    @Autowired
     private SongMapper songMapper;
 
 

@@ -10,10 +10,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import sun.awt.Symbol;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -21,21 +19,29 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * 歌手控制类
+ */
 @RestController
-@RequestMapping(value = "/singer")
+@RequestMapping("/singer")
 public class SingerController {
-    @Autowired
-    SingerService singerService;
 
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public Object addSinger(HttpServletRequest request, HttpSession session) {
+    @Autowired
+    private SingerService singerService;
+
+    /**
+     * 添加歌手
+     */
+    @RequestMapping(value = "/add",method = RequestMethod.POST)
+    public Object addSinger(HttpServletRequest request){
         JSONObject jsonObject = new JSONObject();
-        String name = request.getParameter("name").trim();
-        String sex = request.getParameter("sex").trim();
-        String pic = request.getParameter("pic").trim();
-        String birth = request.getParameter("birth").trim();
-        String location = request.getParameter("location").trim();
-        String introduction = request.getParameter("introduction").trim();
+        String name = request.getParameter("name").trim();      //姓名
+        String sex = request.getParameter("sex").trim();        //性别
+        String pic = request.getParameter("pic").trim();        //头像
+        String birth = request.getParameter("birth").trim();    //生日
+        String location = request.getParameter("location").trim();//地区
+        String introduction = request.getParameter("introduction").trim();//简介
+        //把生日转换成Date格式
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date birthDate = new Date();
         try {
@@ -43,36 +49,38 @@ public class SingerController {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        //保存到歌手的对象中
         Singer singer = new Singer();
-
         singer.setName(name);
-        singer.setBirth(birthDate);
-        singer.setIntroduction(introduction);
-        singer.setLocation(location);
         singer.setSex(new Byte(sex));
         singer.setPic(pic);
-        System.out.println(singer.toString());
-        Boolean flag = singerService.insertSinger(singer);
-        if (flag) {
-            jsonObject.put(Const.code, 1);
-            jsonObject.put(Const.msg, "添加成功");
-
-        } else {
-            jsonObject.put(Const.code, 0);
-            jsonObject.put(Const.msg, "添加失败");
+        singer.setBirth(birthDate);
+        singer.setLocation(location);
+        singer.setIntroduction(introduction);
+        boolean flag = singerService.insert(singer);
+        if(flag){   //保存成功
+            jsonObject.put(Const.code,1);
+            jsonObject.put(Const.msg,"添加成功");
+            return jsonObject;
         }
+        jsonObject.put(Const.code,0);
+        jsonObject.put(Const.msg,"添加失败");
         return jsonObject;
     }
 
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public Object updateSinger(HttpServletRequest request, HttpSession session) {
+    /**
+     * 修改歌手
+     */
+    @RequestMapping(value = "/update",method = RequestMethod.POST)
+    public Object updateSinger(HttpServletRequest request){
         JSONObject jsonObject = new JSONObject();
-        String id = request.getParameter("id").trim();
-        String name = request.getParameter("name").trim();
-        String sex = request.getParameter("sex").trim();
-        String birth = request.getParameter("birth").trim();
-        String location = request.getParameter("location").trim();
-        String introduction = request.getParameter("introduction").trim();
+        String id = request.getParameter("id").trim();          //主键
+        String name = request.getParameter("name").trim();      //姓名
+        String sex = request.getParameter("sex").trim();        //性别
+        String birth = request.getParameter("birth").trim();    //生日
+        String location = request.getParameter("location").trim();//地区
+        String introduction = request.getParameter("introduction").trim();//简介
+        //把生日转换成Date格式
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date birthDate = new Date();
         try {
@@ -80,97 +88,138 @@ public class SingerController {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        //保存到歌手的对象中
         Singer singer = new Singer();
         singer.setId(Integer.parseInt(id));
         singer.setName(name);
-        singer.setBirth(birthDate);
-        singer.setIntroduction(introduction);
-        singer.setLocation(location);
         singer.setSex(new Byte(sex));
-
-        Boolean flag = singerService.update(singer);
-        if (flag) {
-            jsonObject.put(Const.code, 1);
-            jsonObject.put(Const.msg, "更新成功");
-
-        } else {
-            jsonObject.put(Const.code, 0);
-            jsonObject.put(Const.msg, "更新失败");
+        singer.setBirth(birthDate);
+        singer.setLocation(location);
+        singer.setIntroduction(introduction);
+        boolean flag = singerService.update(singer);
+        if(flag){   //保存成功
+            jsonObject.put(Const.code,1);
+            jsonObject.put(Const.msg,"修改成功");
+            return jsonObject;
         }
+        jsonObject.put(Const.code,0);
+        jsonObject.put(Const.msg,"修改失败");
         return jsonObject;
     }
 
-    @RequestMapping(value = "/delete", method = RequestMethod.GET)
-    public Object deleteSinger(HttpServletRequest request, HttpSession session) {
-        JSONObject jsonObject = new JSONObject();
-        String id = request.getParameter("id").trim();
-        Boolean flag = singerService.delete(Integer.parseInt(id));
+
+    /**
+     * 删除歌手
+     */
+    @RequestMapping(value = "/delete",method = RequestMethod.GET)
+    public Object deleteSinger(HttpServletRequest request){
+        String id = request.getParameter("id").trim();          //主键
+        boolean flag = singerService.delete(Integer.parseInt(id));
         return flag;
     }
 
-    @RequestMapping(value = "/selectById", method = RequestMethod.GET)
-    public Object selectById(HttpServletRequest request) {
-        String id = request.getParameter("id").trim();
-        return singerService.selectById(Integer.parseInt(id));
+    /**
+     * 根据主键查询整个对象
+     */
+    @RequestMapping(value = "/selectByPrimaryKey",method = RequestMethod.GET)
+    public Object selectByPrimaryKey(HttpServletRequest request){
+        String id = request.getParameter("id").trim();          //主键
+        return singerService.selectByPrimaryKey(Integer.parseInt(id));
     }
 
-    @RequestMapping(value = "/selectAllSinger", method = RequestMethod.GET)
-    public Object select(HttpServletRequest request) {
+    /**
+     * 查询所有歌手
+     */
+    @RequestMapping(value = "/allSinger",method = RequestMethod.GET)
+    public Object allSinger(HttpServletRequest request){
         return singerService.allSinger();
     }
 
-    //    模糊查询
-    @RequestMapping(value = "/selectOfName", method = RequestMethod.GET)
-    public Object selectOfName(HttpServletRequest request) {
-        String name = request.getParameter("name").trim();
-        return singerService.singerOfName("%" + name + "%");
+    /**
+     * 根据歌手名字模糊查询列表
+     */
+    @RequestMapping(value = "/singerOfName",method = RequestMethod.GET)
+    public Object singerOfName(HttpServletRequest request){
+        String name = request.getParameter("name").trim();          //歌手名字
+        return singerService.singerOfName("%"+name+"%");
     }
 
-    @RequestMapping(value = "/selectOfSex", method = RequestMethod.GET)
-    public Object selectOfSex(HttpServletRequest request) {
-        String sex = request.getParameter("sex").trim();
+    /**
+     * 根据性别查询
+     */
+    @RequestMapping(value = "/singerOfSex",method = RequestMethod.GET)
+    public Object singerOfSex(HttpServletRequest request){
+        String sex = request.getParameter("sex").trim();          //性别
         return singerService.singerOfSex(Integer.parseInt(sex));
     }
 
-    @RequestMapping(value = "/updateSingerPic", method = RequestMethod.POST)
-    public Object updateSingerPic(@RequestParam("file") MultipartFile multipartFile, @RequestParam("id") int id) {
+    /**
+     * 更新歌手图片
+     */
+    @RequestMapping(value = "/updateSingerPic",method = RequestMethod.POST)
+    public Object updateSingerPic(@RequestParam("file") MultipartFile avatorFile, @RequestParam("id")int id){
         JSONObject jsonObject = new JSONObject();
-        if (multipartFile.isEmpty()) {
-            jsonObject.put(Const.code, 0);
-            jsonObject.put(Const.msg, "上传失败");
-        } else {
-//            文件名称
-            String filename = System.currentTimeMillis() + multipartFile.getOriginalFilename();
-//            文件目录
-            String filePath =  System.getProperty("user.dir") + System.getProperty("file.separator") + "img"
-                    + System.getProperty("file.separator") + "singerPic";
-//            如果目录不存在
-            File file = new File(filePath);
-            if (!file.exists()) {
-                file.mkdir();
-            }
-//            实际的文件地址
-            File file1 = new File(filePath + System.getProperty("file.separator") + filename);
-            String storeAvatorPath = "/img/singerPic/" + filename;
-            try {
-                multipartFile.transferTo(file1);
-                Singer singer = new Singer();
-                singer.setId(id);
-                singer.setPic(storeAvatorPath);
-                boolean flag = singerService.update(singer);
-                if (flag) {
-                    jsonObject.put(Const.code, 1);
-                    jsonObject.put(Const.msg, "上传成功");
-                } else {
-                    jsonObject.put(Const.code, 0);
-                    jsonObject.put(Const.msg, "上传失败");
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-                jsonObject.put(Const.code, 0);
-                jsonObject.put(Const.msg, e.getMessage());
-            }
+        if(avatorFile.isEmpty()){
+            jsonObject.put(Const.code,0);
+            jsonObject.put(Const.msg,"文件上传失败");
+            return jsonObject;
         }
-        return jsonObject;
+        //文件名=当前时间到毫秒+原来的文件名
+        String fileName = System.currentTimeMillis()+avatorFile.getOriginalFilename();
+        //文件路径
+        String filePath = System.getProperty("user.dir")+System.getProperty("file.separator")+"img"
+                +System.getProperty("file.separator")+"singerPic";
+        //如果文件路径不存在，新增该路径
+        File file1 = new File(filePath);
+        if(!file1.exists()){
+            file1.mkdir();
+        }
+        //实际的文件地址
+        File dest = new File(filePath+System.getProperty("file.separator")+fileName);
+        //存储到数据库里的相对文件地址
+        String storeAvatorPath = "/img/singerPic/"+fileName;
+        try {
+            avatorFile.transferTo(dest);
+            Singer singer = new Singer();
+            singer.setId(id);
+            singer.setPic(storeAvatorPath);
+            boolean flag = singerService.update(singer);
+            if(flag){
+                jsonObject.put(Const.code,1);
+                jsonObject.put(Const.msg,"上传成功");
+                jsonObject.put("pic",storeAvatorPath);
+                return jsonObject;
+            }
+            jsonObject.put(Const.code,0);
+            jsonObject.put(Const.msg,"上传失败");
+            return jsonObject;
+        } catch (IOException e) {
+            jsonObject.put(Const.code,0);
+            jsonObject.put(Const.msg,"上传失败"+e.getMessage());
+        }finally {
+            return jsonObject;
+        }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

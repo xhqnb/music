@@ -1,19 +1,45 @@
 package com.xhq.music.service;
 
 import com.xhq.music.domain.Singer;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-//歌手service接口
-@Service
+/**
+ * 歌手service接口
+ */
 public interface SingerService {
+    /**
+     *增加
+     */
+    public boolean insert(Singer singer);
 
-    public boolean insertSinger(Singer singer);
+    /**
+     *修改
+     */
     public boolean update(Singer singer);
+
+    /**
+     * 删除
+     */
     public boolean delete(Integer id);
-    public Singer selectById(Integer id);
+
+    /**
+     * 根据主键查询整个对象
+     */
+    public Singer selectByPrimaryKey(Integer id);
+
+    /**
+     * 查询所有歌手
+     */
     public List<Singer> allSinger();
+
+    /**
+     * 根据歌手名字模糊查询列表
+     */
     public List<Singer> singerOfName(String name);
+
+    /**
+     * 根据性别查询
+     */
     public List<Singer> singerOfSex(Integer sex);
 }
